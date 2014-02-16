@@ -43,7 +43,7 @@ public class GameBoard : MonoBehaviour
 
     public void SetOwner(int x, int y, GameLogic.Owner owner)
     {
-        _gameCubes[y * GAME_BOARD_DIMENSION + x].SetOwner(owner);
+        GetGameCube(x, y).SetOwner(owner);
     }
 
     public void SetOwner(Vector2Int position, GameLogic.Owner owner)
@@ -73,20 +73,27 @@ public class GameBoard : MonoBehaviour
         return GetOwner(position.x, position.y);
     }
 
-    public void GetOwnerCounts(out int contagionOut, out int playerCount)
+    public void GetOwnerCounts(out int contagionCount, out int playerCount)
     {
-        contagionOut = 0;
+        contagionCount = 0;
         playerCount = 0;
 
         foreach( GameCube gameCube in _gameCubes )
         {
-            if (gameCube.Owner == GameLogic.Owner.Player)
+            switch (gameCube.Owner)
             {
-                ++playerCount;
-            }
-            else
-            {
-                ++contagionOut;
+                case GameLogic.Owner.Contagion:
+                    {
+                        ++contagionCount;
+                    }
+                    break;
+                case GameLogic.Owner.Player:
+                    {
+                        ++playerCount;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }

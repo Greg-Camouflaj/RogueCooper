@@ -8,6 +8,7 @@ public class GameCube : MonoBehaviour
     static private Material Mat_Nuetral = null;
     static private Material Mat_Contagion = null;
     static private Material Mat_Player = null;
+    static private Material Mat_PowerUp = null;
 
     GameObject _visualCube = null;
 
@@ -29,6 +30,10 @@ public class GameCube : MonoBehaviour
         // Player material.
         Mat_Player = new Material(Shader_Default);
         Mat_Player.color = Color.blue;
+
+        // PowerUp material.
+        Mat_PowerUp = new Material(Shader_Default);
+        Mat_PowerUp.color = Color.yellow;
     }
 
     public void Initialize( int x, int y )
@@ -62,6 +67,11 @@ public class GameCube : MonoBehaviour
             case GameLogic.Owner.Player:
                 {
                     material = Mat_Player;
+                }
+                break;
+            case GameLogic.Owner.PowerUp:
+                {
+                    material = Mat_PowerUp;
                 }
                 break;
             case GameLogic.Owner.Nuetral:

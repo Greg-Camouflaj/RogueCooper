@@ -13,6 +13,7 @@ public class GameLogic : MonoBehaviour
         Nuetral = 0,
 		Contagion = 1,
 		Player = 2,
+        PowerUp = 3,
 	}
 
 	private Owner _currentTurnOwner = Owner.Contagion;
