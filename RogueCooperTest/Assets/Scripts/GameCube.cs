@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class GameCube : MonoBehaviour
@@ -12,7 +12,7 @@ public class GameCube : MonoBehaviour
 
     GameObject _visualCube = null;
 
-    GameLogic.Owner _currentOwner = GameLogic.Owner.Nuetral;
+    GameLogic.Owner _currentOwner = GameLogic.Owner.Neutral;
     public GameLogic.Owner Owner { get { return _currentOwner; } }
 
     static public void CreateMaterials()
@@ -43,7 +43,7 @@ public class GameCube : MonoBehaviour
 
         transform.position = new Vector3(0.5F + x + (x * 0.1F), 0.5F + y + (y * 0.1F), 0);
 
-        SetOwner(GameLogic.Owner.Nuetral);
+        SetOwner(GameLogic.Owner.Neutral);
     }
 
     public void SetOwner(GameLogic.Owner newOwner)
@@ -74,7 +74,7 @@ public class GameCube : MonoBehaviour
                     material = Mat_PowerUp;
                 }
                 break;
-            case GameLogic.Owner.Nuetral:
+            case GameLogic.Owner.Neutral:
             default:
                 {
                     material = Mat_Neutral;

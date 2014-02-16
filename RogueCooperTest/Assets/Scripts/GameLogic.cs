@@ -10,14 +10,14 @@ public class GameLogic : MonoBehaviour
 
 	public enum Owner
 	{
-        Nuetral = 0,
+        Neutral = 0,
 		Contagion = 1,
 		Player = 2,
         PowerUp = 3,
 	}
 
-	private Owner _currentTurnOwner = Owner.Contagion;
-	private int turnsSinceLastPowerUp = 0;
+	private Owner _currentTurnOwner;
+	private int turnsSinceLastPowerUp;
 	private GameBoard _gameBoard = null;
 
     private void Start()
@@ -39,6 +39,8 @@ public class GameLogic : MonoBehaviour
 		UpdateScore();
 
 		// Contagion picks first spot
+		_currentTurnOwner = Owner.Contagion;
+		turnsSinceLastPowerUp = 1;
 		ContagionPicksInitialSpot();
 
         _currentTurnOwner = Owner.Player;
@@ -52,6 +54,12 @@ public class GameLogic : MonoBehaviour
 			DoContagionTurn();
 
             _currentTurnOwner = Owner.Player;
+			turnsSinceLastPowerUp++;
+			if (turnsSinceLastPowerUp >= POWER_UP_SPAWN_INTERVAL)
+			{
+				SpawnPowerUp ();
+				turnsSinceLastPowerUp = 0;
+			}
 		}
 		else
 		{
@@ -67,6 +75,17 @@ public class GameLogic : MonoBehaviour
 
 		//Also remember to update our score every frame
 		UpdateScore();
+	}
+
+	private void SpawnPowerUp()
+	{
+		List<Vector2Int> possibleSpawnPoints;
+		_gameBoard.GetCubesOfType(Owner.Neutral, out possibleSpawnPoints);
+		if (possibleSpawnPoints.Count > 0)
+		{
+			int index = UnityEngine.Random.Range(0, possibleSpawnPoints.Count);
+			_gameBoard.SetOwner(possibleSpawnPoints[index], Owner.PowerUp);
+		}
 	}
 
 	private void GenerateGameBoard()
