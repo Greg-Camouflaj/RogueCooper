@@ -12,9 +12,8 @@ public class GameBoard : MonoBehaviour
     {
         _gameCubes = new List<GameCube>(GAME_BOARD_DIMENSION * GAME_BOARD_DIMENSION);
 
-        int halfDimension = GAME_BOARD_DIMENSION / 2;
-		int startingIndex = 0;
-		int endingIndex = GAME_BOARD_DIMENSION;
+		const int startingIndex = 0;
+		const int endingIndex = GAME_BOARD_DIMENSION;
         
         //This outer loop tracks our vertical position
         for (int y = startingIndex; y < endingIndex; y++)
@@ -31,7 +30,27 @@ public class GameBoard : MonoBehaviour
             }
         }
 
+        // Let's adjust the camera to make sure the board always fits.
+        Camera.main.orthographicSize = GameBoard.GAME_BOARD_DIMENSION * 0.6f;
+        const int halfDimension = GAME_BOARD_DIMENSION / 2;
 		Camera.main.transform.position = new Vector3(halfDimension, halfDimension, Camera.main.transform.position.z);
+    }
+
+    public void Reset()
+    {
+        if (_gameCubes != null)
+        {
+            foreach (GameCube gameCube in _gameCubes)
+            {
+                gameCube.Reset();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[GameBoard] Reset - Expected valid list of GameCubes but none were found. Will attempt to generate it all from scratch.", this);
+
+            GenerateGameBoard();
+        }
     }
 
     public GameCube GetGameCube(int x, int y)
@@ -76,10 +95,11 @@ public class GameBoard : MonoBehaviour
         return GetOwner(position.x, position.y);
     }
 
-    public void GetOwnerCounts(out int contagionCount, out int playerCount)
+    public void GetOwnerCounts(out int contagionCount, out int playerCount, out int otherCount)
     {
         contagionCount = 0;
         playerCount = 0;
+		otherCount = 0;
 
         foreach( GameCube gameCube in _gameCubes )
         {
@@ -96,6 +116,9 @@ public class GameBoard : MonoBehaviour
                     }
                     break;
                 default:
+					{
+				++otherCount;
+					}
                     break;
             }
         }
@@ -124,7 +147,8 @@ public class GameBoard : MonoBehaviour
 
     public bool IsValidContagionMove(int x, int y)
     {
-        return (IsInBounds(x, y) && GetGameCube(x, y).Owner != GameLogic.Owner.Player);
+		GameCube gameCube = IsInBounds(x, y)? GetGameCube(x, y) : null;
+		return (gameCube != null && gameCube.Owner != GameLogic.Owner.Player && gameCube.Owner != GameLogic.Owner.Contagion);
     }
 
     public bool IsValidContagionMove(Vector2Int position)
@@ -174,5 +198,32 @@ public class GameBoard : MonoBehaviour
 		}
 
 		return false;
+	}
+
+	public bool IsThereAnyValidPlayerMove()
+	{
+		bool valid = false;
+		foreach(GameCube cube in _gameCubes)
+		{
+			if (IsValidPlayerMove(cube.PositionInt))
+			{
+				valid = true;
+				break;
+			}
+		}
+
+		return valid;
+	}
+
+	public void SetUnclaimedTilesToPlayer()
+	{
+		for (int i = 0; i < _gameCubes.Count; ++i)
+		{
+			GameCube cube = _gameCubes[i];
+			if (cube.Owner == GameLogic.Owner.Neutral || cube.Owner == GameLogic.Owner.PowerUp)
+			{
+				cube.SetOwner(GameLogic.Owner.Player);
+            }
+        }
 	}
 }

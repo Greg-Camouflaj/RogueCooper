@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;   // for List.
 
@@ -21,12 +21,13 @@ public class GameLogic : MonoBehaviour
 	private int playerBonusMoves;
 	private GameBoard _gameBoard = null;
 
+	private bool gameOver;
+	private bool playerIsDone;
 	public int PlayerBonusMoves
 	{
 		get { return playerBonusMoves; }
 		set { playerBonusMoves = value; }
 	}
-
 	public GameBoard GameBoard
 	{
 		get { return _gameBoard; }
@@ -48,6 +49,8 @@ public class GameLogic : MonoBehaviour
 	private void InitializeGameState()
 	{
 		GenerateGameBoard();
+		gameOver = false;
+		playerIsDone = false;
 		UpdateScore();
 
 		// Contagion picks first spot
@@ -61,29 +64,48 @@ public class GameLogic : MonoBehaviour
 
 	private void Update()
 	{
-		// Depending on whose turn it is, we do different behavior.
-		if( _currentTurnOwner == Owner.Contagion )
-		{
-			DoContagionTurn();
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            InitializeGameState();
+        }
 
-            _currentTurnOwner = Owner.Player;
-			turnsSinceLastPowerUp++;
-			if (turnsSinceLastPowerUp >= POWER_UP_SPAWN_INTERVAL)
+		if (!gameOver)
+		{
+			// Depending on whose turn it is, we do different behavior.
+			if( _currentTurnOwner == Owner.Contagion )
 			{
-				SpawnPowerUp ();
-				turnsSinceLastPowerUp = 0;
-			}
-		}
-		else
-		{
-			// Else, this is the Player's turn.
-			DoPlayerTurn();
-			//@TODO: Wait for input of the Player selecting one of the valid blocks.
+				DoContagionTurn();
 
-            if (Input.GetKeyUp(KeyCode.P))
-            {
-                _currentTurnOwner = Owner.Contagion;
-            }
+				if (!playerIsDone)
+				{
+					if (_gameBoard.IsThereAnyValidPlayerMove())
+					{
+						_currentTurnOwner = Owner.Player;
+					}
+					else
+					{
+						playerIsDone = true;
+					}
+                }
+
+                turnsSinceLastPowerUp++;
+				if (turnsSinceLastPowerUp >= POWER_UP_SPAWN_INTERVAL)
+				{
+					SpawnPowerUp ();
+					turnsSinceLastPowerUp = 0;
+				}
+			}
+			else if ( _currentTurnOwner == Owner.Player )
+			{
+				// Else, this is the Player's turn.
+				DoPlayerTurn();
+				//@TODO: Wait for input of the Player selecting one of the valid blocks.
+
+	            if (Input.GetKeyUp(KeyCode.P))
+	            {
+	                _currentTurnOwner = Owner.Contagion;
+				}
+			}
 		}
 
 		//Also remember to update our score every frame
@@ -169,7 +191,20 @@ public class GameLogic : MonoBehaviour
         {
             _gameBoard.SetOwner(position, Owner.Contagion);
         }
+
+		if (movesToMake.Count < 1)
+		{
+			// Games over!
+			TriggerGameOver();
+		}
 	}
+
+	private void TriggerGameOver()
+	{
+		gameOver = true;
+		_currentTurnOwner = Owner.Neutral;
+		_gameBoard.SetUnclaimedTilesToPlayer();
+    }
 
 	private void CreateScore()
 	{
@@ -182,9 +217,12 @@ public class GameLogic : MonoBehaviour
 
 	private void UpdateScore()
 	{
-		int score;
+		int playerCount;
 		int contagionCount;
-		_gameBoard.GetOwnerCounts(out contagionCount, out score);
+		int otherCount;
+		_gameBoard.GetOwnerCounts(out contagionCount, out playerCount, out otherCount);
+
+		int score = playerCount;
 		foo.text = "Score: " + score;
 	}
 
@@ -240,7 +278,5 @@ public class GameLogic : MonoBehaviour
 				}
 			}
 		}
-
-
 	}
 }
