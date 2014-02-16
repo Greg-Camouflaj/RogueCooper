@@ -83,14 +83,14 @@ public class GameLogic : MonoBehaviour
 		if (Input.GetMouseButtonDown(0))
 		{
 			Vector3 mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			Vector2 mousePosition = new Vector2(mousePosition3D.x, mousePosition3D.y);
+			Vector2 mousePosition = mousePosition3D.ToVector2();
 
 			Collider2D closest = null;
 			float closestDistanceSqr = Mathf.Infinity;
 			Collider2D[] colliders = Physics2D.OverlapCircleAll(mousePosition, touchRadius);
 			for (int i = 0; i < colliders.Length; ++i)
 			{
-				float distanceSqr = Vector2.SqrMagnitude(colliders[i].transform.GetPosition2D() - mousePosition);
+				float distanceSqr = Vector2.SqrMagnitude(colliders[i].transform.position.ToVector2() - mousePosition);
 				if (distanceSqr < closestDistanceSqr)
 				{
 					closest = colliders[i];
