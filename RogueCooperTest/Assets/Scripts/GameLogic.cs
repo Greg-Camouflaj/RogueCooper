@@ -21,21 +21,17 @@ public class GameLogic : MonoBehaviour
 	private int playerBonusMoves;
 	private GameBoard _gameBoard = null;
 
-<<<<<<< HEAD
 	private bool gameOver;
 	private bool playerIsDone;
-=======
 	public int PlayerBonusMoves
 	{
 		get { return playerBonusMoves; }
 		set { playerBonusMoves = value; }
 	}
-
 	public GameBoard GameBoard
 	{
 		get { return _gameBoard; }
 	}
->>>>>>> 1e84c3354907d7bf11ad7880126facef16be392a
 
     private void Start()
     {
@@ -68,18 +64,12 @@ public class GameLogic : MonoBehaviour
 
 	private void Update()
 	{
-<<<<<<< HEAD
 		if (!gameOver)
-=======
-        //@DEBUG: Reset the Game.
         if (Input.GetKeyUp(KeyCode.R))
         {
             InitializeGameState();
         }
-
-		// Depending on whose turn it is, we do different behavior.
 		if( _currentTurnOwner == Owner.Contagion )
->>>>>>> 1e84c3354907d7bf11ad7880126facef16be392a
 		{
 			// Depending on whose turn it is, we do different behavior.
 			if( _currentTurnOwner == Owner.Contagion )
@@ -97,7 +87,7 @@ public class GameLogic : MonoBehaviour
 						playerIsDone = true;
 					}
                 }
-                
+
                 turnsSinceLastPowerUp++;
 				if (turnsSinceLastPowerUp >= POWER_UP_SPAWN_INTERVAL)
 				{
@@ -140,10 +130,9 @@ public class GameLogic : MonoBehaviour
             GameObject gameBoardObj = new GameObject("GameBoard");
             _gameBoard = gameBoardObj.AddComponent<GameBoard>();
             _gameBoard.GenerateGameBoard();
-        }
-        else
-        {
-            _gameBoard.Reset();
+
+            // Let's adjust the camera to make sure the board always fits.
+            Camera.main.orthographicSize = GameBoard.GAME_BOARD_DIMENSION * 0.6f;
         }
 	}
 

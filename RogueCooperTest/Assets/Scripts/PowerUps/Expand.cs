@@ -14,7 +14,7 @@ public class Expand : PowerUp
 
 		for (int i = 0; i < spotsToClaim.Length; i++)
 		{
-			if (board.IsValidPlayerMove2(spotsToClaim[i]))
+			if (board.IsValidPlayerMove(spotsToClaim[i]))
 			{
 				board.SetOwner(spotsToClaim[i], GameLogic.Owner.Player);
 			}

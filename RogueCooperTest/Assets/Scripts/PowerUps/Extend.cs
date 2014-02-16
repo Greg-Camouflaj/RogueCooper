@@ -23,7 +23,7 @@ public class Extend : PowerUp
 	private void ClaimInDirection(GameLogic logic, Vector2Int direction)
 	{
 		Vector2Int toClaim = positionOnBoard + direction;
-		while (logic.GameBoard.IsValidPlayerMove2(toClaim))
+		while (logic.GameBoard.IsValidPlayerMove(toClaim))
 		{
 			logic.GameBoard.SetOwner(toClaim, GameLogic.Owner.Player);
 			toClaim += direction;
