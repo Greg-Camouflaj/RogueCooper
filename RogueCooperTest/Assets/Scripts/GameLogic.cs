@@ -92,7 +92,8 @@ public class GameLogic : MonoBehaviour
 	{
         if (_gameBoard == null)
         {
-            _gameBoard = new GameBoard();
+            GameObject gameBoardObj = new GameObject("GameBoard");
+            _gameBoard = gameBoardObj.AddComponent<GameBoard>();
             _gameBoard.GenerateGameBoard();
         }
 	}
