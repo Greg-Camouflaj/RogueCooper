@@ -185,7 +185,7 @@ public class GameLogic : MonoBehaviour
 		int score;
 		int contagionCount;
 		_gameBoard.GetOwnerCounts(out contagionCount, out score);
-		foo.text = "Score: " + contagionCount;
+		foo.text = "Score: " + score;
 	}
 
 	private void DoPlayerTurn()
@@ -217,8 +217,24 @@ public class GameLogic : MonoBehaviour
 				{
 					if (_gameBoard.IsValidPlayerMove(clickedGameCube.PositionInt))
 					{
-						clickedGameCube.SetOwner(Owner.Player);
-						_currentTurnOwner = Owner.Contagion;
+						bool gotPowerUp = _gameBoard.GetOwner(clickedGameCube.PositionInt) == Owner.PowerUp;
+						clickedGameCube.SetOwner(Owner.Player);  //Must do this before calculating powerups!
+
+						if (gotPowerUp)
+						{
+							PowerUp powerUp = PowerUpFactory.GetRandomPowerUp(clickedGameCube.PositionInt);
+							powerUp.GrantEffect(this);
+						}
+
+						if (playerBonusMoves == 0)
+						{
+							_currentTurnOwner = Owner.Contagion;
+						}
+						else
+						{
+							playerBonusMoves--;
+							turnsSinceLastPowerUp++;
+						}
 					}
 					// else TODO show some error thing
 				}
