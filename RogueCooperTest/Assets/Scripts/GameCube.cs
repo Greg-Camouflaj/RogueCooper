@@ -40,6 +40,8 @@ public class GameCube : MonoBehaviour
     {
         _visualCube = GameObject.CreatePrimitive(PrimitiveType.Quad);
         _visualCube.transform.parent = this.transform;
+		Destroy(_visualCube.collider);
+		gameObject.AddComponent<BoxCollider2D>();
 
         transform.position = new Vector3(0.5F + x + (x * 0.1F), 0.5F + y + (y * 0.1F), 0);
 

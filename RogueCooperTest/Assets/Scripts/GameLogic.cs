@@ -64,7 +64,7 @@ public class GameLogic : MonoBehaviour
 		else
 		{
 			// Else, this is the Player's turn.
-
+			DoPlayerTurn();
 			//@TODO: Wait for input of the Player selecting one of the valid blocks.
 
             if (Input.GetKeyUp(KeyCode.P))
@@ -174,4 +174,50 @@ public class GameLogic : MonoBehaviour
 		_gameBoard.GetOwnerCounts(out contagionCount, out score);
 		foo.text = "Score: " + contagionCount;
 	}
+
+	private void DoPlayerTurn()
+	{
+		const float touchRadius = 100.0f;
+		if (Input.GetMouseButtonDown(0))
+		{
+			Vector3 mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			Vector2 mousePosition = mousePosition3D.ToVector2();
+
+			Collider2D closest = null;
+			float closestDistanceSqr = Mathf.Infinity;
+			Collider2D[] colliders = Physics2D.OverlapCircleAll(mousePosition, touchRadius);
+			for (int i = 0; i < colliders.Length; ++i)
+			{
+				float distanceSqr = Vector2.SqrMagnitude(colliders[i].transform.position.ToVector2() - mousePosition);
+				if (distanceSqr < closestDistanceSqr)
+				{
+					closest = colliders[i];
+					closestDistanceSqr = distanceSqr;
+				}
+			}
+
+			// Tapped on something!
+			if (closest != null)
+			{
+				GameCube clickedGameCube = closest.GetComponent<GameCube>();
+				if (clickedGameCube != null)
+				{
+					if (clickedGameCube.Owner == Owner.Neutral)
+					{
+						clickedGameCube.SetOwner(Owner.Player);
+						_currentTurnOwner = Owner.Contagion;
+					}
+				}
+			}
+		}
+
+
+	}
+
+	void OnGUI()
+	{
+		Vector3 mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		Vector2 mousePosition = new Vector2(mousePosition3D.x, mousePosition3D.y);
+		GUILayout.Label(mousePosition.ToString());
+    }
 }
