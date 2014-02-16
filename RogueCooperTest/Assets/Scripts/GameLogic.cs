@@ -64,12 +64,12 @@ public class GameLogic : MonoBehaviour
 
 	private void Update()
 	{
-		if (!gameOver)
         if (Input.GetKeyUp(KeyCode.R))
         {
             InitializeGameState();
         }
-		if( _currentTurnOwner == Owner.Contagion )
+
+		if (!gameOver)
 		{
 			// Depending on whose turn it is, we do different behavior.
 			if( _currentTurnOwner == Owner.Contagion )
