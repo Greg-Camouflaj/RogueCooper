@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;   // for List.
 
 public class GameLogic : MonoBehaviour
 {
@@ -32,7 +33,6 @@ public class GameLogic : MonoBehaviour
 
 	private void InitializeGameState()
 	{
-		//@TODO: Generate game board first.
 		GenerateGameBoard();
 		UpdateScore();
 
@@ -56,6 +56,11 @@ public class GameLogic : MonoBehaviour
 			// Else, this is the Player's turn.
 
 			//@TODO: Wait for input of the Player selecting one of the valid blocks.
+
+            if (Input.GetKeyUp(KeyCode.P))
+            {
+                _currentTurnOwner = Owner.Contagion;
+            }
 		}
 
 		//Also remember to update our score every frame
@@ -82,7 +87,50 @@ public class GameLogic : MonoBehaviour
 
 	private void DoContagionTurn()
 	{
-		//@TODO: We look for all spots on the board where the Contagion currently is and then spread to all adjacent squares.
+        //@TODO: We look for all spots on the board where the Contagion currently is and then spread to all adjacent squares.
+
+        List<Vector2Int> movesToMake = new List<Vector2Int>();
+
+        List<Vector2Int> contagionCubes;
+        _gameBoard.GetContagionCubes(out contagionCubes);
+
+        foreach (Vector2Int position in contagionCubes)
+        {
+            //@TODO: Mark moves to make by doing left, right, up, and down checks.
+
+            // Left:
+            Vector2Int leftMove = position.GetLeft();
+            if( _gameBoard.IsValidContagionMove( leftMove ) )
+            {
+                movesToMake.Add(leftMove);
+            }
+
+            // Right:
+            Vector2Int rightMove = position.GetRight();
+            if (_gameBoard.IsValidContagionMove(rightMove))
+            {
+                movesToMake.Add(rightMove);
+            }
+
+            // Up:
+            Vector2Int upMove = position.GetUp();
+            if (_gameBoard.IsValidContagionMove(upMove))
+            {
+                movesToMake.Add(upMove);
+            }
+
+            // Down:
+            Vector2Int downMove = position.GetDown();
+            if (_gameBoard.IsValidContagionMove(downMove))
+            {
+                movesToMake.Add(downMove);
+            }
+        }
+
+        foreach (Vector2Int position in movesToMake)
+        {
+            _gameBoard.SetOwner(position, Owner.Contagion);
+        }
 	}
 
 	private void CreateScore()
