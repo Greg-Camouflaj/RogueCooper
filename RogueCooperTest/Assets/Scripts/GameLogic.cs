@@ -33,6 +33,8 @@ public class GameLogic : MonoBehaviour
 
 		// Contagion picks first spot
 		ContagionPicksInitialSpot();
+
+        _currentTurnOwner = Owner.Player;
 	}
 
 	private void Update()
@@ -64,6 +66,10 @@ public class GameLogic : MonoBehaviour
 	private void ContagionPicksInitialSpot()
 	{
 		//@TODO: Contagion picks random spot among the grid.
+        int x = Random.Range(0, GameBoard.GAME_BOARD_DIMENSION - 1);
+        int y = Random.Range(0, GameBoard.GAME_BOARD_DIMENSION - 1);
+
+        _gameBoard.SetOwner(x, y, Owner.Contagion);
 	}
 
 	private void DoContagionTurn()

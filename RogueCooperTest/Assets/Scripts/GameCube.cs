@@ -10,6 +10,7 @@ public class GameCube : MonoBehaviour
     static private Material Mat_Player = null;
 
     GameObject _visualCube = null;
+
     GameLogic.Owner _currentOwner = GameLogic.Owner.Nuetral;
 
     static public void CreateMaterials()
@@ -20,21 +21,21 @@ public class GameCube : MonoBehaviour
         Mat_Nuetral = new Material(Shader_Default);
         Mat_Nuetral.color = Color.gray;
 
-        // Nuetral material.
+        // Contagion material.
         Mat_Contagion = new Material(Shader_Default);
         Mat_Contagion.color = Color.green;
 
-        // Nuetral material.
+        // Player material.
         Mat_Player = new Material(Shader_Default);
         Mat_Player.color = Color.blue;
     }
 
-    public void Initialize( int i, int j )
+    public void Initialize( int x, int y )
     {
         _visualCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         _visualCube.transform.parent = this.transform;
 
-        transform.position = new Vector3(0.5F + i + (i * 0.1F), 0.5F + j + (j * 0.1F), 0);
+        transform.position = new Vector3(0.5F + x + (x * 0.1F), 0.5F + y + (y * 0.1F), 0);
 
         SetOwner(GameLogic.Owner.Nuetral);
     }
