@@ -3,6 +3,9 @@ using System.Collections;
 
 public class GameLogic : MonoBehaviour
 {
+
+	private GUIText foo;
+
 	public enum Owner
 	{
         Nuetral = 0,
@@ -24,12 +27,14 @@ public class GameLogic : MonoBehaviour
     private void CreateDependencies()
     {
         GameCube.CreateMaterials();
+		CreateScore();
     }
 
 	private void InitializeGameState()
 	{
 		//@TODO: Generate game board first.
 		GenerateGameBoard();
+		UpdateScore();
 
 		// Contagion picks first spot
 		ContagionPicksInitialSpot();
@@ -52,6 +57,9 @@ public class GameLogic : MonoBehaviour
 
 			//@TODO: Wait for input of the Player selecting one of the valid blocks.
 		}
+
+		//Also remember to update our score every frame
+		UpdateScore();
 	}
 
 	private void GenerateGameBoard()
@@ -75,5 +83,22 @@ public class GameLogic : MonoBehaviour
 	private void DoContagionTurn()
 	{
 		//@TODO: We look for all spots on the board where the Contagion currently is and then spread to all adjacent squares.
+	}
+
+	private void CreateScore()
+	{
+		GameObject score = new GameObject("Score");
+		score.transform.position = new Vector3(0, 1, 0);
+		foo = score.AddComponent<GUIText>();
+		foo.color = Color.red;
+		foo.fontSize = 22;
+	}
+
+	private void UpdateScore()
+	{
+		int score;
+		int contagionCount;
+		_gameBoard.GetOwnerCounts(out contagionCount, out score);
+		foo.text = "Score: " + score;
 	}
 }
