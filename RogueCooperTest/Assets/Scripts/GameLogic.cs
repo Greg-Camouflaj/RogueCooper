@@ -174,7 +174,7 @@ public class GameLogic : MonoBehaviour
 
 	private void DoPlayerTurn()
 	{
-		const float touchRadius = 100.0f;
+		const float touchRadius = 0.2f;
 		if (Input.GetMouseButtonDown(0))
 		{
 			Vector3 mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -199,22 +199,16 @@ public class GameLogic : MonoBehaviour
 				GameCube clickedGameCube = closest.GetComponent<GameCube>();
 				if (clickedGameCube != null)
 				{
-					if (clickedGameCube.Owner == Owner.Neutral)
+					if (_gameBoard.IsValidPlayerMove(clickedGameCube.PositionInt))
 					{
 						clickedGameCube.SetOwner(Owner.Player);
 						_currentTurnOwner = Owner.Contagion;
 					}
+					// else TODO show some error thing
 				}
 			}
 		}
 
 
 	}
-
-	void OnGUI()
-	{
-		Vector3 mousePosition3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		Vector2 mousePosition = new Vector2(mousePosition3D.x, mousePosition3D.y);
-		GUILayout.Label(mousePosition.ToString());
-    }
 }

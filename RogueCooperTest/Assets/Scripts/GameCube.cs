@@ -11,6 +11,8 @@ public class GameCube : MonoBehaviour
     static private Material Mat_PowerUp = null;
 
     GameObject _visualCube = null;
+	Vector2Int _positionInt;
+	public Vector2Int PositionInt { get { return _positionInt; } }
 
     GameLogic.Owner _currentOwner = GameLogic.Owner.Neutral;
     public GameLogic.Owner Owner { get { return _currentOwner; } }
@@ -38,6 +40,7 @@ public class GameCube : MonoBehaviour
 
     public void Initialize( int x, int y )
     {
+		_positionInt = new Vector2Int(x, y);
         _visualCube = GameObject.CreatePrimitive(PrimitiveType.Quad);
         _visualCube.transform.parent = this.transform;
 		Destroy(_visualCube.collider);
