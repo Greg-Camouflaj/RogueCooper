@@ -22,8 +22,9 @@ public class GameBoard : MonoBehaviour
             //Create all our cubes in a horizontal line
             for (int x = startingIndex; x < endingIndex; x++)
             {
-                GameObject newGameCubeObj = new GameObject();
+                GameObject newGameCubeObj = new GameObject(string.Format("GameCube [x:{0},y:{1}]", x, y));
                 GameCube newGameCube = newGameCubeObj.AddComponent<GameCube>();
+                newGameCube.transform.parent = this.transform;
                 newGameCube.Initialize(x, y);
 
                 _gameCubes.Add(newGameCube);
