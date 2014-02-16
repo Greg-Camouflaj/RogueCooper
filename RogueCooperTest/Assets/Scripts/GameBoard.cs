@@ -35,4 +35,22 @@ public class GameBoard : MonoBehaviour
     {
         _gameCubes[y * GAME_BOARD_DIMENSION + x].SetOwner(owner);
     }
+
+    public void GetOwnerCounts(out int contagionOut, out int playerCount)
+    {
+        contagionOut = 0;
+        playerCount = 0;
+
+        foreach( GameCube gameCube in _gameCubes )
+        {
+            if (gameCube.Owner == GameLogic.Owner.Player)
+            {
+                ++playerCount;
+            }
+            else
+            {
+                ++contagionOut;
+            }
+        }
+    }
 }

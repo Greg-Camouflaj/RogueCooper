@@ -12,6 +12,7 @@ public class GameCube : MonoBehaviour
     GameObject _visualCube = null;
 
     GameLogic.Owner _currentOwner = GameLogic.Owner.Nuetral;
+    public GameLogic.Owner Owner { get { return _currentOwner; } }
 
     static public void CreateMaterials()
     {
