@@ -76,10 +76,11 @@ public class GameBoard : MonoBehaviour
         return GetOwner(position.x, position.y);
     }
 
-    public void GetOwnerCounts(out int contagionCount, out int playerCount)
+    public void GetOwnerCounts(out int contagionCount, out int playerCount, out int otherCount)
     {
         contagionCount = 0;
         playerCount = 0;
+		otherCount = 0;
 
         foreach( GameCube gameCube in _gameCubes )
         {
@@ -96,6 +97,9 @@ public class GameBoard : MonoBehaviour
                     }
                     break;
                 default:
+					{
+				++otherCount;
+					}
                     break;
             }
         }
@@ -124,7 +128,8 @@ public class GameBoard : MonoBehaviour
 
     public bool IsValidContagionMove(int x, int y)
     {
-        return (IsInBounds(x, y) && GetGameCube(x, y).Owner != GameLogic.Owner.Player);
+		GameCube gameCube = IsInBounds(x, y)? GetGameCube(x, y) : null;
+		return (gameCube != null && gameCube.Owner != GameLogic.Owner.Player && gameCube.Owner != GameLogic.Owner.Contagion);
     }
 
     public bool IsValidContagionMove(Vector2Int position)
@@ -173,5 +178,32 @@ public class GameBoard : MonoBehaviour
 		}
 
 		return false;
+	}
+
+	public bool IsThereAnyValidPlayerMove()
+	{
+		bool valid = false;
+		foreach(GameCube cube in _gameCubes)
+		{
+			if (IsValidPlayerMove(cube.PositionInt))
+			{
+				valid = true;
+				break;
+			}
+		}
+
+		return valid;
+	}
+
+	public void SetUnclaimedTilesToPlayer()
+	{
+		for (int i = 0; i < _gameCubes.Count; ++i)
+		{
+			GameCube cube = _gameCubes[i];
+			if (cube.Owner == GameLogic.Owner.Neutral || cube.Owner == GameLogic.Owner.PowerUp)
+			{
+				cube.SetOwner(GameLogic.Owner.Player);
+            }
+        }
 	}
 }
