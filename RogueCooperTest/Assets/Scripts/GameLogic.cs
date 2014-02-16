@@ -95,6 +95,9 @@ public class GameLogic : MonoBehaviour
             GameObject gameBoardObj = new GameObject("GameBoard");
             _gameBoard = gameBoardObj.AddComponent<GameBoard>();
             _gameBoard.GenerateGameBoard();
+
+            // Let's adjust the camera to make sure the board always fits.
+            Camera.main.orthographicSize = GameBoard.GAME_BOARD_DIMENSION * 0.6f;
         }
 	}
 

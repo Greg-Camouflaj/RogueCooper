@@ -5,7 +5,7 @@ public class GameCube : MonoBehaviour
 {
     static private Shader Shader_Default = null;
 
-    static private Material Mat_Nuetral = null;
+    static private Material Mat_Neutral = null;
     static private Material Mat_Contagion = null;
     static private Material Mat_Player = null;
     static private Material Mat_PowerUp = null;
@@ -22,8 +22,8 @@ public class GameCube : MonoBehaviour
         Shader_Default = Shader.Find("Self-Illumin/Diffuse");
 
         // Nuetral material.
-        Mat_Nuetral = new Material(Shader_Default);
-        Mat_Nuetral.color = Color.gray;
+        Mat_Neutral = new Material(Shader_Default);
+        Mat_Neutral.color = Color.gray;
 
         // Contagion material.
         Mat_Contagion = new Material(Shader_Default);
@@ -82,7 +82,7 @@ public class GameCube : MonoBehaviour
             case GameLogic.Owner.Neutral:
             default:
                 {
-                    material = Mat_Nuetral;
+                    material = Mat_Neutral;
                 }
                 break;
         }
