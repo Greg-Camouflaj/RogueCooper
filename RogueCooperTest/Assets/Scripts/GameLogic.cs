@@ -48,6 +48,12 @@ public class GameLogic : MonoBehaviour
 
 	private void Update()
 	{
+        //@DEBUG: Reset the Game.
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            InitializeGameState();
+        }
+
 		// Depending on whose turn it is, we do different behavior.
 		if( _currentTurnOwner == Owner.Contagion )
 		{
@@ -95,9 +101,10 @@ public class GameLogic : MonoBehaviour
             GameObject gameBoardObj = new GameObject("GameBoard");
             _gameBoard = gameBoardObj.AddComponent<GameBoard>();
             _gameBoard.GenerateGameBoard();
-
-            // Let's adjust the camera to make sure the board always fits.
-            Camera.main.orthographicSize = GameBoard.GAME_BOARD_DIMENSION * 0.6f;
+        }
+        else
+        {
+            _gameBoard.Reset();
         }
 	}
 

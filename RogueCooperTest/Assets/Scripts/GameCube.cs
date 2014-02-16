@@ -48,6 +48,11 @@ public class GameCube : MonoBehaviour
 
         transform.position = new Vector3(0.5F + x + (x * 0.1F), 0.5F + y + (y * 0.1F), 0);
 
+        Reset();
+    }
+
+    public void Reset()
+    {
         SetOwner(GameLogic.Owner.Neutral);
     }
 
