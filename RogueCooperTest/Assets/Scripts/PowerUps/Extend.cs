@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Extend : PowerUp
 {
+	public Extend()
+	{
+	}
+
 	public Extend(Vector2Int pos) : base(pos)
 	{
 	}
@@ -19,6 +23,11 @@ public class Extend : PowerUp
 			}
 		}
 	}
+	
+	public override PowerUp Create ()
+	{
+		return new Extend();
+	}
 
 	private void ClaimInDirection(GameLogic logic, Vector2Int direction)
 	{
@@ -33,6 +42,6 @@ public class Extend : PowerUp
 	private bool CanClaimDirection(GameLogic logic, Vector2Int direction)
 	{
 		Vector2Int opposite = positionOnBoard - direction;
-		return logic.GameBoard.GetOwner(opposite) == GameLogic.Owner.Player;
+		return logic.GameBoard.IsInBounds(opposite) && logic.GameBoard.GetOwner(opposite) == GameLogic.Owner.Player;
 	}
 }

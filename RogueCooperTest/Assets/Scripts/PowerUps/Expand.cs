@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Expand : PowerUp
 {
+	public Expand()
+	{
+	}
+
 	public Expand(Vector2Int pos) : base(pos)
 	{
 	}
@@ -19,5 +23,10 @@ public class Expand : PowerUp
 				board.SetOwner(spotsToClaim[i], GameLogic.Owner.Player);
 			}
 		}
+	}
+
+	public override PowerUp Create ()
+	{
+		return new Expand();
 	}
 }

@@ -161,7 +161,8 @@ public class GameBoard : MonoBehaviour
 	public bool IsValidPlayerMove(Vector2Int position)
 	{
 		bool isValid = false;
-		if ( GetGameCube(position).Owner == GameLogic.Owner.Neutral )
+		if ( IsInBounds(position) && (GetGameCube(position).Owner == GameLogic.Owner.Neutral ||
+		     GetGameCube(position).Owner == GameLogic.Owner.PowerUp))
 		{
 			List<Vector2Int> cubes;
 			GetCubesOfType(GameLogic.Owner.Player, out cubes);

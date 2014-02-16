@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;   // for List.
 
@@ -35,6 +35,7 @@ public class GameLogic : MonoBehaviour
 
     private void Start()
     {
+		Application.targetFrameRate = 60;
         CreateDependencies();
 
         InitializeGameState();
@@ -78,6 +79,7 @@ public class GameLogic : MonoBehaviour
 
 				if (!playerIsDone)
 				{
+					// TODO also check if we can make a next move and if not then end hte game.
 					if (_gameBoard.IsThereAnyValidPlayerMove())
 					{
 						_currentTurnOwner = Owner.Player;
@@ -134,6 +136,10 @@ public class GameLogic : MonoBehaviour
             // Let's adjust the camera to make sure the board always fits.
             Camera.main.orthographicSize = GameBoard.GAME_BOARD_DIMENSION * 0.6f;
         }
+		else
+		{
+			_gameBoard.Reset();
+		}
 	}
 
 	private void ContagionPicksInitialSpot()
@@ -260,8 +266,24 @@ public class GameLogic : MonoBehaviour
 				{
 					if (_gameBoard.IsValidPlayerMove(clickedGameCube.PositionInt))
 					{
-						clickedGameCube.SetOwner(Owner.Player);
-						_currentTurnOwner = Owner.Contagion;
+						bool gotPowerUp = _gameBoard.GetOwner(clickedGameCube.PositionInt) == Owner.PowerUp;
+						clickedGameCube.SetOwner(Owner.Player);  //Must do this before calculating powerups!
+
+						if (gotPowerUp)
+						{
+							PowerUp powerUp = PowerUpFactory.GetRandomPowerUp(clickedGameCube.PositionInt);
+							powerUp.GrantEffect(this);
+						}
+
+						if (playerBonusMoves == 0)
+						{
+							_currentTurnOwner = Owner.Contagion;
+						}
+						else
+						{
+							playerBonusMoves--;
+							turnsSinceLastPowerUp++;
+						}
 					}
 					// else TODO show some error thing
 				}
