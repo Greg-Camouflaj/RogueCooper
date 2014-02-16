@@ -12,9 +12,8 @@ public class GameBoard : MonoBehaviour
     {
         _gameCubes = new List<GameCube>(GAME_BOARD_DIMENSION * GAME_BOARD_DIMENSION);
 
-        int halfDimension = GAME_BOARD_DIMENSION / 2;
-		int startingIndex = 0;
-		int endingIndex = GAME_BOARD_DIMENSION;
+		const int startingIndex = 0;
+		const int endingIndex = GAME_BOARD_DIMENSION;
         
         //This outer loop tracks our vertical position
         for (int y = startingIndex; y < endingIndex; y++)
@@ -31,7 +30,27 @@ public class GameBoard : MonoBehaviour
             }
         }
 
+        // Let's adjust the camera to make sure the board always fits.
+        Camera.main.orthographicSize = GameBoard.GAME_BOARD_DIMENSION * 0.6f;
+        const int halfDimension = GAME_BOARD_DIMENSION / 2;
 		Camera.main.transform.position = new Vector3(halfDimension, halfDimension, Camera.main.transform.position.z);
+    }
+
+    public void Reset()
+    {
+        if (_gameCubes != null)
+        {
+            foreach (GameCube gameCube in _gameCubes)
+            {
+                gameCube.Reset();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[GameBoard] Reset - Expected valid list of GameCubes but none were found. Will attempt to generate it all from scratch.", this);
+
+            GenerateGameBoard();
+        }
     }
 
     public GameCube GetGameCube(int x, int y)

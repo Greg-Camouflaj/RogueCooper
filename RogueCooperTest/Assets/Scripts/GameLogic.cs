@@ -18,10 +18,24 @@ public class GameLogic : MonoBehaviour
 
 	private Owner _currentTurnOwner;
 	private int turnsSinceLastPowerUp;
+	private int playerBonusMoves;
 	private GameBoard _gameBoard = null;
 
+<<<<<<< HEAD
 	private bool gameOver;
 	private bool playerIsDone;
+=======
+	public int PlayerBonusMoves
+	{
+		get { return playerBonusMoves; }
+		set { playerBonusMoves = value; }
+	}
+
+	public GameBoard GameBoard
+	{
+		get { return _gameBoard; }
+	}
+>>>>>>> 1e84c3354907d7bf11ad7880126facef16be392a
 
     private void Start()
     {
@@ -46,6 +60,7 @@ public class GameLogic : MonoBehaviour
 		// Contagion picks first spot
 		_currentTurnOwner = Owner.Contagion;
 		turnsSinceLastPowerUp = 1;
+		playerBonusMoves = 0;
 		ContagionPicksInitialSpot();
 
         _currentTurnOwner = Owner.Player;
@@ -53,7 +68,18 @@ public class GameLogic : MonoBehaviour
 
 	private void Update()
 	{
+<<<<<<< HEAD
 		if (!gameOver)
+=======
+        //@DEBUG: Reset the Game.
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            InitializeGameState();
+        }
+
+		// Depending on whose turn it is, we do different behavior.
+		if( _currentTurnOwner == Owner.Contagion )
+>>>>>>> 1e84c3354907d7bf11ad7880126facef16be392a
 		{
 			// Depending on whose turn it is, we do different behavior.
 			if( _currentTurnOwner == Owner.Contagion )
@@ -114,9 +140,10 @@ public class GameLogic : MonoBehaviour
             GameObject gameBoardObj = new GameObject("GameBoard");
             _gameBoard = gameBoardObj.AddComponent<GameBoard>();
             _gameBoard.GenerateGameBoard();
-
-            // Let's adjust the camera to make sure the board always fits.
-            Camera.main.orthographicSize = GameBoard.GAME_BOARD_DIMENSION * 0.6f;
+        }
+        else
+        {
+            _gameBoard.Reset();
         }
 	}
 
