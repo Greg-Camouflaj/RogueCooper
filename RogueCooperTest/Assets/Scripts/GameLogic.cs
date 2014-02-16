@@ -154,9 +154,13 @@ public class GameLogic : MonoBehaviour
         List<Vector2Int> contagionCubes;
         _gameBoard.GetContagionCubes(out contagionCubes);
 
-        foreach (Vector2Int position in contagionCubes)
+        int numCubes = contagionCubes.Count;
+        int index;
+        for (index = 0; index < numCubes; ++index)
         {
             //@TODO: Mark moves to make by doing left, right, up, and down checks.
+
+            Vector2Int position = contagionCubes[index];
 
             // Left:
             Vector2Int leftMove = position.GetLeft();
@@ -187,9 +191,10 @@ public class GameLogic : MonoBehaviour
             }
         }
 
-        foreach (Vector2Int position in movesToMake)
+        int numMovesToMake = movesToMake.Count;
+        for (index = 0; index < numMovesToMake; ++index)
         {
-            _gameBoard.SetOwner(position, Owner.Contagion);
+            _gameBoard.SetOwner(movesToMake[index], Owner.Contagion);
         }
 
 		if (movesToMake.Count < 1)

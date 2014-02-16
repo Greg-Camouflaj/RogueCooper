@@ -40,9 +40,10 @@ public class GameBoard : MonoBehaviour
     {
         if (_gameCubes != null)
         {
-            foreach (GameCube gameCube in _gameCubes)
+            int numCubes = _gameCubes.Count;
+            for (int index = 0; index < numCubes; ++index)
             {
-                gameCube.Reset();
+                _gameCubes[index].Reset();
             }
         }
         else
@@ -101,9 +102,10 @@ public class GameBoard : MonoBehaviour
         playerCount = 0;
 		otherCount = 0;
 
-        foreach( GameCube gameCube in _gameCubes )
+        int numCubes = _gameCubes.Count;
+        for (int index = 0; index < numCubes; ++index)
         {
-            switch (gameCube.Owner)
+            switch (_gameCubes[index].Owner)
             {
                 case GameLogic.Owner.Contagion:
                     {
@@ -117,7 +119,7 @@ public class GameBoard : MonoBehaviour
                     break;
                 default:
 					{
-				++otherCount;
+				        ++otherCount;
 					}
                     break;
             }
@@ -166,9 +168,10 @@ public class GameBoard : MonoBehaviour
 
 			if (cubes.Count > 0)
 			{
-				foreach (Vector2Int cube in cubes)
+                int numCubes = cubes.Count;
+                for( int index = 0; index < numCubes; ++index )
 		        {
-					if (IsAdjacent(position, cube))
+                    if (IsAdjacent(position, cubes[index]))
 					{
 						isValid = true;
 					}
@@ -186,25 +189,31 @@ public class GameBoard : MonoBehaviour
 
 	public bool IsAdjacent(Vector2Int a, Vector2Int b)
 	{
-		if (a.x - b.x == 1 || a.x - b.x == -1)
-		{
-			return a.y == b.y;
-		}
+        bool isAdjacent;
 
-		if (a.y - b.y == 1 || a.y - b.y == -1)
+        if (Mathf.Abs(a.x - b.x) == 1)
 		{
-			return a.x == b.x;
+            isAdjacent = (a.y == b.y);
 		}
+        else if (Mathf.Abs(a.y - b.y) == 1)
+        {
+            isAdjacent = (a.x == b.x);
+        }
+        else
+        {
+            isAdjacent = false;
+        }
 
-		return false;
+        return isAdjacent;
 	}
 
 	public bool IsThereAnyValidPlayerMove()
 	{
 		bool valid = false;
-		foreach(GameCube cube in _gameCubes)
+        int numCubes = _gameCubes.Count;
+        for (int index = 0; index < numCubes; ++index)
 		{
-			if (IsValidPlayerMove(cube.PositionInt))
+            if (IsValidPlayerMove(_gameCubes[index].PositionInt))
 			{
 				valid = true;
 				break;
