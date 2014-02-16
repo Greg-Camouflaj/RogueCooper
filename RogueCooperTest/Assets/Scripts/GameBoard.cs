@@ -98,20 +98,25 @@ public class GameBoard : MonoBehaviour
         }
     }
 
-    public void GetContagionCubes(out List<Vector2Int> contagionCubes)
-    {
-        contagionCubes = new List<Vector2Int>();
-
-        for (int y = 0; y < GAME_BOARD_DIMENSION; y++)
-        {
-            for (int x = 0; x < GAME_BOARD_DIMENSION; x++)
-            {
-                if (_gameCubes[y * GAME_BOARD_DIMENSION + x].Owner == GameLogic.Owner.Contagion)
-                {
-                    contagionCubes.Add(new Vector2Int(x, y));
-                }
-            }
-        }
+	public void GetCubesOfType(GameLogic.Owner owner, out List<Vector2Int> cubes)
+	{
+		cubes = new List<Vector2Int>();
+		
+		for (int y = 0; y < GAME_BOARD_DIMENSION; y++)
+		{
+			for (int x = 0; x < GAME_BOARD_DIMENSION; x++)
+			{
+				if (_gameCubes[y * GAME_BOARD_DIMENSION + x].Owner == owner)
+				{
+					cubes.Add(new Vector2Int(x, y));
+				}
+			}
+		}
+	}
+	
+	public void GetContagionCubes(out List<Vector2Int> contagionCubes)
+	{
+		GetCubesOfType (GameLogic.Owner.Contagion, out contagionCubes);
     }
 
     public bool IsValidContagionMove(int x, int y)
