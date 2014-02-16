@@ -4,6 +4,10 @@ using System.Collections.Generic;   // for List.
 
 public class GameLogic : MonoBehaviour
 {
+	private const int POWER_UP_SPAWN_INTERVAL = 3;
+
+	private GUIText foo;
+
 	public enum Owner
 	{
         Nuetral = 0,
@@ -13,7 +17,7 @@ public class GameLogic : MonoBehaviour
 	}
 
 	private Owner _currentTurnOwner = Owner.Contagion;
-
+	private int turnsSinceLastPowerUp = 0;
 	private GameBoard _gameBoard = null;
 
     private void Start()
@@ -26,11 +30,13 @@ public class GameLogic : MonoBehaviour
     private void CreateDependencies()
     {
         GameCube.CreateMaterials();
+		CreateScore();
     }
 
 	private void InitializeGameState()
 	{
 		GenerateGameBoard();
+		UpdateScore();
 
 		// Contagion picks first spot
 		ContagionPicksInitialSpot();
@@ -58,6 +64,9 @@ public class GameLogic : MonoBehaviour
                 _currentTurnOwner = Owner.Contagion;
             }
 		}
+
+		//Also remember to update our score every frame
+		UpdateScore();
 	}
 
 	private void GenerateGameBoard()
@@ -125,5 +134,22 @@ public class GameLogic : MonoBehaviour
         {
             _gameBoard.SetOwner(position, Owner.Contagion);
         }
+	}
+
+	private void CreateScore()
+	{
+		GameObject score = new GameObject("Score");
+		score.transform.position = new Vector3(0, 1, 0);
+		foo = score.AddComponent<GUIText>();
+		foo.color = Color.red;
+		foo.fontSize = 22;
+	}
+
+	private void UpdateScore()
+	{
+		int score;
+		int contagionCount;
+		_gameBoard.GetOwnerCounts(out contagionCount, out score);
+		foo.text = "Score: " + contagionCount;
 	}
 }
