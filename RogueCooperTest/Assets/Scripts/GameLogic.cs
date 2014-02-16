@@ -4,6 +4,7 @@ using System.Collections.Generic;   // for List.
 
 public class GameLogic : MonoBehaviour
 {
+	private const int POWER_UP_SPAWN_INTERVAL = 3;
 
 	private GUIText foo;
 
@@ -15,7 +16,7 @@ public class GameLogic : MonoBehaviour
 	}
 
 	private Owner _currentTurnOwner = Owner.Contagion;
-
+	private int turnsSinceLastPowerUp = 0;
 	private GameBoard _gameBoard = null;
 
     private void Start()
@@ -147,6 +148,6 @@ public class GameLogic : MonoBehaviour
 		int score;
 		int contagionCount;
 		_gameBoard.GetOwnerCounts(out contagionCount, out score);
-		foo.text = "Score: " + score;
+		foo.text = "Score: " + contagionCount;
 	}
 }
