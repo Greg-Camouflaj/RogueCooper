@@ -199,7 +199,7 @@ public class GameLogic : MonoBehaviour
 				GameCube clickedGameCube = closest.GetComponent<GameCube>();
 				if (clickedGameCube != null)
 				{
-					if (clickedGameCube.Owner == Owner.Nuetral)
+					if (clickedGameCube.Owner == Owner.Neutral)
 					{
 						clickedGameCube.SetOwner(Owner.Player);
 						_currentTurnOwner = Owner.Contagion;
