@@ -3,10 +3,11 @@ using System.Collections;
 
 public class GameLogic : MonoBehaviour
 {
-	enum Owner
+	public enum Owner
 	{
-		Contagion = 0,
-		Player = 1,
+        Nuetral = 0,
+		Contagion = 1,
+		Player = 2,
 	}
 
 	private Owner _currentTurnOwner = Owner.Contagion;
@@ -15,7 +16,14 @@ public class GameLogic : MonoBehaviour
 
     private void Start()
     {
+        CreateDependencies();
+
         InitializeGameState();
+    }
+
+    private void CreateDependencies()
+    {
+        GameCube.CreateMaterials();
     }
 
 	private void InitializeGameState()
