@@ -129,4 +129,15 @@ public class GameBoard : MonoBehaviour
     {
         return IsValidContagionMove(position.x, position.y);
     }
+
+	//TODO: Switch this to actual function in gameboard that eric is adding.
+	public bool IsValidPlayerMove2(int x, int y)
+	{
+		return true;
+	}
+	
+	public bool IsValidPlayerMove2(Vector2Int pos)
+	{
+		return true;
+	}
 }

@@ -18,7 +18,19 @@ public class GameLogic : MonoBehaviour
 
 	private Owner _currentTurnOwner;
 	private int turnsSinceLastPowerUp;
+	private int playerBonusMoves;
 	private GameBoard _gameBoard = null;
+
+	public int PlayerBonusMoves
+	{
+		get { return playerBonusMoves; }
+		set { playerBonusMoves = value; }
+	}
+
+	public GameBoard GameBoard
+	{
+		get { return _gameBoard; }
+	}
 
     private void Start()
     {
@@ -41,6 +53,7 @@ public class GameLogic : MonoBehaviour
 		// Contagion picks first spot
 		_currentTurnOwner = Owner.Contagion;
 		turnsSinceLastPowerUp = 1;
+		playerBonusMoves = 0;
 		ContagionPicksInitialSpot();
 
         _currentTurnOwner = Owner.Player;
