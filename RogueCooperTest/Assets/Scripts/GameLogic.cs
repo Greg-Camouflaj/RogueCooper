@@ -33,6 +33,8 @@ public class GameLogic : MonoBehaviour
 		if( _currentTurnOwner == Owner.Contagion )
 		{
 			DoContagionTurn();
+
+            _currentTurnOwner = Owner.Player;
 		}
 		else
 		{
@@ -53,7 +55,7 @@ public class GameLogic : MonoBehaviour
 
 	private void ContagionPicksInitialSpot()
 	{
-		//@TODO:
+		//@TODO: Contagion picks random spot among the grid.
 	}
 
 	private void DoContagionTurn()

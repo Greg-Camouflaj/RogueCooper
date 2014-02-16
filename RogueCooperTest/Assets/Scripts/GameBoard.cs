@@ -3,7 +3,8 @@ using System.Collections;
 
 public class GameBoard : MonoBehaviour
 {
-    private const int GAME_BOARD_DIMENSION = 12;
+    public const int GAME_BOARD_DIMENSION = 12;
+
 
     private GameCube[] _gameCubes = null;
 
