@@ -13,9 +13,9 @@ public class GameBoard : MonoBehaviour
         _gameCubes = new List<GameCube>(GAME_BOARD_DIMENSION * GAME_BOARD_DIMENSION);
 
         int halfDimension = GAME_BOARD_DIMENSION / 2;
-        int startingIndex = -1 * halfDimension;
-        int endingIndex = halfDimension;
-
+		int startingIndex = 0;
+		int endingIndex = GAME_BOARD_DIMENSION;
+        
         //This outer loop tracks our vertical position
         for (int y = startingIndex; y < endingIndex; y++)
         {
@@ -30,6 +30,8 @@ public class GameBoard : MonoBehaviour
                 _gameCubes.Add(newGameCube);
             }
         }
+
+		Camera.main.transform.position = new Vector3(halfDimension, halfDimension, Camera.main.transform.position.z);
     }
 
     public GameCube GetGameCube(int x, int y)
@@ -129,4 +131,47 @@ public class GameBoard : MonoBehaviour
     {
         return IsValidContagionMove(position.x, position.y);
     }
+
+	public bool IsValidPlayerMove(Vector2Int position)
+	{
+		bool isValid = false;
+		if ( GetGameCube(position).Owner == GameLogic.Owner.Neutral )
+		{
+			List<Vector2Int> cubes;
+			GetCubesOfType(GameLogic.Owner.Player, out cubes);
+
+			if (cubes.Count > 0)
+			{
+				foreach (Vector2Int cube in cubes)
+		        {
+					if (IsAdjacent(position, cube))
+					{
+						isValid = true;
+					}
+				}
+			}
+			else
+			{
+				// There are no player ownewd cubes so the player can place anywheres.
+				isValid = true;
+			}
+		}
+
+		return isValid;
+	}
+
+	public bool IsAdjacent(Vector2Int a, Vector2Int b)
+	{
+		if (a.x - b.x == 1 || a.x - b.x == -1)
+		{
+			return a.y == b.y;
+		}
+
+		if (a.y - b.y == 1 || a.y - b.y == -1)
+		{
+			return a.x == b.x;
+		}
+
+		return false;
+	}
 }
